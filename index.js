@@ -1,22 +1,27 @@
 const core = require('@actions/core');
-const wait = require('./wait');
+const github = require('@actions/github');
+const listFiles = require('./listFiles');
 
-
-// most @actions toolkit packages have async methods
 async function run() {
-  try { 
-    const ms = core.getInput('milliseconds');
-    console.log(`Waiting ${ms} milliseconds ...`)
+  try {
+    const token = core.getInput('token', { required: true });
+    const owner = core.getInput('owner') || github.context.repo.owner;
+    const repo = core.getInput('repo') || github.context.repo.repo;
+    const prNumber = core.getInput('prNumber', { required: true });
+    const storagePath = core.getInput('storagePath', { required: true });
 
-    core.debug((new Date()).toTimeString())
-    await wait(parseInt(ms));
-    core.debug((new Date()).toTimeString())
-
-    core.setOutput('time', new Date().toTimeString());
-  } 
+    await listFiles({
+      client: new github.GitHub(token),
+      owner,
+      repo,
+      prNumber: parseInt(prNumber),
+      storagePath,
+      log: (msg) => core.info(msg),
+    });
+  }
   catch (error) {
     core.setFailed(error.message);
   }
 }
 
-run()
+run();
