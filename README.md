@@ -158,7 +158,11 @@ You can now consume the action by referencing the v1 branch
 ```yaml
 uses: betrybe/download-files-from-pr-action@v1
 with:
-  milliseconds: 1000
+  token: 'my-token'
+  owner: 'my-org'
+  repo: 'my-repo'
+  prNumber: '34'
+  storagePath: 'tmp/my'
 ```
 
 See the [actions tab](https://github.com/betrybe/download-files-from-pr-action/actions) for runs of this action! :rocket:
