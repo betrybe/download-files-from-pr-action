@@ -25,6 +25,7 @@
   "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
     "@actions/core": "^1.1.1",
+    "@actions/github": "^2.2.0",
     "kind-of": ">=6.0.3",
     "minimist": ">=1.2.3"
   },
