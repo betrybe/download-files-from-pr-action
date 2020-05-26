@@ -15,11 +15,15 @@ jobs:
     - run: npm ci
     - run: npm test
 
-  # test action works running from the graph  
+  # test action works running from the graph
   test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - uses: ./
       with:
-        milliseconds: 1000
+        token: 'my-token'
+        owner: 'my-org'
+        repo: 'my-repo'
+        prNumber: '34'
+        storagePath: 'tmp/my'
