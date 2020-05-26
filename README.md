@@ -3,6 +3,56 @@
   <a href="https://github.com/betrybe/download-files-from-pr-action/actions"><img alt="javscript-action status" src="https://github.com/betrybe/download-files-from-pr-action/workflows/units-test/badge.svg"></a>
 </p>
 
+# GitHub Action: Download files from PR
+
+A GitHub action that download modified files from specific _Pull Request_.
+
+## Example usage
+
+```yaml
+steps:
+  - name: Download files from PR
+    uses: betrybe/download-files-from-pr-action@master
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      prNumber: ${{ github.event.number }}
+```
+
+## Inputs
+
+This action accepts the following configuration parameters via `with:`
+
+- `token`
+
+  **Required**
+
+  The GitHub token to use for making API requests
+
+- `owner`
+
+  **Default: `github.repo.owner`**
+
+  The owner of the GitHub repository you want to download files
+
+- `repo`
+
+  **Default: `github.repo.repo`**
+
+  The name of the GitHub repository you want to download files
+
+- `prNumber`
+
+  **Required**
+
+  The Pull Request number you want do download files
+
+- `storagePath`
+
+  **Required**
+  **Default: "tmp"**
+
+  Local path to store downloaded files
+
 # Create a JavaScript Action
 
 Use this template to bootstrap the creation of a JavaScript action.:rocket:
