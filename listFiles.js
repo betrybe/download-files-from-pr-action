@@ -1,4 +1,4 @@
-const listFiles = (options) => {
+const listFiles = async (options) => {
   const {
     client,
     owner,
@@ -9,6 +9,7 @@ const listFiles = (options) => {
   } = options;
 
   console.log(options);
+  console.log(await client.pulls.listFiles());
 };
 
 module.exports = listFiles;

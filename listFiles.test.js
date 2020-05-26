@@ -21,7 +21,7 @@ describe('listFiles', () => {
   it('test', async () => {
     client.pulls.listFiles.mockResolvedValue({
       data: {
-        my: test
+        my: 'test'
       }
     });
     await run();
