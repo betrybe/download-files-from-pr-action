@@ -4231,7 +4231,7 @@ const listFiles = async (options) => {
     page: 1,
   });
   return files
-    .filter(({ filename }) => filename.includes(filterPath))
+    .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
     .map(({ filename }) => filename);
 };
 
