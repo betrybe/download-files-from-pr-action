@@ -198,4 +198,71 @@ describe('Main', () => {
     const file2 = fs.readFileSync('tmp/convert/content/meu-arquivo.md');
     expect('blablabla\n').toBe(file2.toString());
   });
+
+  it('download filtered files from pull request', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }]
+    });
+    client.repos.getContents
+      .mockResolvedValueOnce({
+        data: {
+          name: 'meu-arquivo.md',
+          path: 'content/meu-arquivo.md',
+          type: 'file',
+          content: 'YmxhYmxhYmxhCg==\n',
+          encoding: 'base64',
+        }
+      }
+    );
+    await runDownloadFiles('content/');
+    expect(client.pulls.listFiles).toHaveBeenCalled();
+    expect(client.repos.getContents).toHaveBeenCalled();
+    const file1 = fs.readFileSync('tmp/convert/content/meu-arquivo.md');
+    expect('blablabla\n').toBe(file1.toString());
+  });
+
+  it('download files from pull request in specific directory', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }]
+    });
+    client.repos.getContents
+      .mockResolvedValueOnce({
+        data: {
+          name: 'README.md',
+          path: 'README.md',
+          type: 'file',
+          content: 'YmxhYmxhYmxhCg==\n',
+          encoding: 'base64',
+        }
+      })
+      .mockResolvedValueOnce({
+        data: {
+          name: 'meu-arquivo.md',
+          path: 'content/meu-arquivo.md',
+          type: 'file',
+          content: 'YmxhYmxhYmxhCg==\n',
+          encoding: 'base64',
+        }
+      }
+    );
+    await runDownloadFiles('', 'tmp/convert/other');
+    expect(client.pulls.listFiles).toHaveBeenCalled();
+    expect(client.repos.getContents).toHaveBeenCalledTimes(2);
+    const file1 = fs.readFileSync('tmp/convert/other/README.md');
+    expect('blablabla\n').toBe(file1.toString());
+    const file2 = fs.readFileSync('tmp/convert/other/content/meu-arquivo.md');
+    expect('blablabla\n').toBe(file2.toString());
+  });
 });
