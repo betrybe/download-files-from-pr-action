@@ -27,14 +27,30 @@ const runDownloadFile = (storagePath = 'tmp/convert') => {
     owner: 'my-org',
     repo: 'my-repo',
     ref: 'b83924d03941d253d388e688fdad178f8f727112',
-    prNumber: 1,
     storagePath,
     filename: 'content/meu-arquivo.md',
     log: () => {},
   });
 };
 
+const runDownloadFiles = (filterPath = '', storagePath = 'tmp/convert') => {
+  return main.downloadFiles({
+    client,
+    owner: 'my-org',
+    repo: 'my-repo',
+    ref: 'b83924d03941d253d388e688fdad178f8f727112',
+    prNumber: 1,
+    storagePath,
+    filterPath,
+    log: () => {},
+  });
+};
+
 describe('Main', () => {
+  beforeEach(() => {
+    fs.rmdirSync('tmp', { recursive: true });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -133,13 +149,53 @@ describe('Main', () => {
           content: 'YmxhYmxhYmxhCg==\n',
           encoding: 'base64',
         }
-      });
+      }
+    );
     await runDownloadFile();
     await runDownloadFile();
     expect(client.repos.getContents).toHaveBeenCalledTimes(2);
     const file1 = fs.readFileSync('tmp/convert/content/meu-arquivo.md');
     expect('blablabla\n').toBe(file1.toString());
     const file2 = fs.readFileSync('tmp/convert/content/my/outro-arquivo.md');
+    expect('blablabla\n').toBe(file2.toString());
+  });
+
+  it('download files from pull request', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }]
+    });
+    client.repos.getContents
+      .mockResolvedValueOnce({
+        data: {
+          name: 'README.md',
+          path: 'README.md',
+          type: 'file',
+          content: 'YmxhYmxhYmxhCg==\n',
+          encoding: 'base64',
+        }
+      })
+      .mockResolvedValueOnce({
+        data: {
+          name: 'meu-arquivo.md',
+          path: 'content/meu-arquivo.md',
+          type: 'file',
+          content: 'YmxhYmxhYmxhCg==\n',
+          encoding: 'base64',
+        }
+      }
+    );
+    await runDownloadFiles();
+    expect(client.pulls.listFiles).toHaveBeenCalled();
+    expect(client.repos.getContents).toHaveBeenCalledTimes(2);
+    const file1 = fs.readFileSync('tmp/convert/README.md');
+    expect('blablabla\n').toBe(file1.toString());
+    const file2 = fs.readFileSync('tmp/convert/content/meu-arquivo.md');
     expect('blablabla\n').toBe(file2.toString());
   });
 });

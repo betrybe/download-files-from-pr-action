@@ -47,7 +47,26 @@ const downloadFile = async (options) => {
   fs.writeFileSync(localPath, content);
 };
 
+const downloadFiles = async (options) => {
+  const {
+    client,
+    owner,
+    repo,
+    ref,
+    prNumber,
+    filterPath,
+    storagePath,
+    log
+  } = options;
+
+  const filenames = await listFiles({ client, owner, repo, prNumber, filterPath, log });
+  return Promise.all(
+    filenames.map(filename => downloadFile({ client, owner, repo, ref, storagePath, filename, log }))
+  );
+};
+
 module.exports = {
   listFiles,
   downloadFile,
+  downloadFiles,
 };
