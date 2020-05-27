@@ -1,3 +1,4 @@
+name: "Evaluator"
 on:
   pull_request:
     types: [opened, synchronize]
