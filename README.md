@@ -53,6 +53,10 @@ This action accepts the following configuration parameters via `with:`
 
   Local path to store downloaded files
 
+- `filterPath`
+
+  Filter files to be downloaded by path
+
 # Create a JavaScript Action
 
 Use this template to bootstrap the creation of a JavaScript action.:rocket:

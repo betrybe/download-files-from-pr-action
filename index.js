@@ -9,6 +9,7 @@ async function run() {
     const repo = core.getInput('repo') || github.context.repo.repo;
     const prNumber = core.getInput('prNumber', { required: true });
     const storagePath = core.getInput('storagePath', { required: true });
+    const filterPath = core.getInput('filterPath') || '';
 
     await listFiles({
       client: new github.GitHub(token),
@@ -16,6 +17,7 @@ async function run() {
       repo,
       prNumber: parseInt(prNumber),
       storagePath,
+      filterPath,
       log: (msg) => core.info(msg),
     });
   }

@@ -27,3 +27,4 @@ jobs:
         repo: 'my-repo'
         prNumber: '34'
         storagePath: 'tmp/my'
+        filterPath: 'content'

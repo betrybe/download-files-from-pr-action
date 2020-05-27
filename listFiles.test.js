@@ -6,24 +6,38 @@ const client = {
   }
 };
 
-const run = () => {
-  listFiles({
+const run = (storagePath = 'tmp/convert', filterPath = '') => {
+  return listFiles({
     client,
     owner: 'my-org',
     repo: 'my-repo',
     prNumber: 1,
-    storagePath: 'tmp/convert',
+    storagePath,
+    filterPath,
     log: () => {},
   });
 };
 
 describe('listFiles', () => {
-  it('test', async () => {
+  it('list files', async () => {
     client.pulls.listFiles.mockResolvedValue({
-      data: {
-        my: 'test'
-      }
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }, {
+        filename: 'wait.js',
+        status: 'removed',
+      }]
     });
-    await run();
+    const expected = [
+      'README.md',
+      'content/meu-arquivo.md',
+      'wait.js',
+    ];
+    const filenames = await run();
+    expect(filenames).toEqual(expect.arrayContaining(expected));
   });
 });
