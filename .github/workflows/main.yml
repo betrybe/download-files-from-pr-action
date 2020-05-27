@@ -15,4 +15,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.sha }}
           prNumber: ${{ github.event.number }}
-        
+      - run: ls -l
