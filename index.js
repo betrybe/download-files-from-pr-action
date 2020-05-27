@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const listFiles = require('./listFiles');
+const main = require('./main');
 
 async function run() {
   try {
@@ -11,7 +11,7 @@ async function run() {
     const storagePath = core.getInput('storagePath', { required: true });
     const filterPath = core.getInput('filterPath') || '';
 
-    await listFiles({
+    await main.downloadFiles({
       client: new github.GitHub(token),
       owner,
       repo,

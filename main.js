@@ -12,4 +12,6 @@ const listFiles = async (options) => {
   return files.map(file => file.filename);
 };
 
-module.exports = listFiles;
+module.exports = {
+  listFiles,
+};

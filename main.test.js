@@ -1,4 +1,4 @@
-const listFiles = require('./listFiles');
+const main = require('./main');
 
 const client = {
   pulls: {
@@ -7,7 +7,7 @@ const client = {
 };
 
 const run = (storagePath = 'tmp/convert', filterPath = '') => {
-  return listFiles({
+  return main.listFiles({
     client,
     owner: 'my-org',
     repo: 'my-repo',
@@ -18,8 +18,8 @@ const run = (storagePath = 'tmp/convert', filterPath = '') => {
   });
 };
 
-describe('listFiles', () => {
-  it('list files', async () => {
+describe('Main', () => {
+  it('list all files from Pull Request', async () => {
     client.pulls.listFiles.mockResolvedValue({
       data: [{
         filename: 'README.md',
