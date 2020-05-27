@@ -3,6 +3,7 @@ const listFiles = async (options) => {
     client,
     owner,
     repo,
+    ref,
     prNumber,
     storagePath,
     filterPath,

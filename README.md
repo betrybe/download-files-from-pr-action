@@ -40,6 +40,13 @@ This action accepts the following configuration parameters via `with:`
 
   The name of the GitHub repository you want to download files
 
+- `ref`
+
+  **Required**
+  **Default: `github.sha`**
+
+  The Git ref of the commit you want to download files
+
 - `prNumber`
 
   **Required**

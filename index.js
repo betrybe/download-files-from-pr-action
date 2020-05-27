@@ -7,6 +7,7 @@ async function run() {
     const token = core.getInput('token', { required: true });
     const owner = core.getInput('owner') || github.context.repo.owner;
     const repo = core.getInput('repo') || github.context.repo.repo;
+    const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
     const storagePath = core.getInput('storagePath', { required: true });
     const filterPath = core.getInput('filterPath') || '';
@@ -15,6 +16,7 @@ async function run() {
       client: new github.GitHub(token),
       owner,
       repo,
+      ref,
       prNumber: parseInt(prNumber),
       storagePath,
       filterPath,

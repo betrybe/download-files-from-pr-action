@@ -8,6 +8,8 @@ inputs:
     description: 'The owner of the GitHub repository you want to download files'
   repo:
     description: 'The name of the GitHub repository you want to download files'
+  ref:
+    description: 'The Git ref of the commit you want to download files'
   prNumber:
     description: 'The Pull Request number you want do download files'
     required: true

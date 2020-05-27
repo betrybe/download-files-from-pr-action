@@ -11,6 +11,7 @@ const run = (storagePath = 'tmp/convert', filterPath = '') => {
     client,
     owner: 'my-org',
     repo: 'my-repo',
+    ref: 'b83924d03941d253d388e688fdad178f8f727112',
     prNumber: 1,
     storagePath,
     filterPath,
