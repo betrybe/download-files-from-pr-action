@@ -22,10 +22,6 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ./
       with:
-        token: 'my-token'
-        owner: 'my-org'
-        repo: 'my-repo'
-        ref: 'b83924d03941d253d388e688fdad178f8f727112'
-        prNumber: '34'
-        storagePath: 'tmp/my'
-        filterPath: 'content'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.event.pull_request.head.sha }}
+        prNumber: ${{ github.event.number }}
