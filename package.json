@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint index.js",
     "package": "ncc build index.js -o dist",
-    "test": "eslint index.js && jest"
+    "test": "eslint index.js && jest",
+    "test:watch": "eslint index.js && jest --watchAll"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,14 @@
   },
   "homepage": "https://github.com/actions/javascript-action#readme",
   "dependencies": {
-    "@actions/core": "^1.1.1"
+    "@actions/core": "^1.1.1",
+    "@actions/github": "^2.2.0",
+    "kind-of": ">=6.0.3",
+    "minimist": ">=1.2.3"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.20.5",
     "eslint": "^6.3.0",
-    "jest": "^24.9.0"
+    "jest": "^26.0.1"
   }
 }

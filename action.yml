@@ -1,13 +1,24 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Download files from PR'
+description: 'Download modified files from specific Pull Request'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  token:
+    description: 'The GitHub token to use for making API requests'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps 
-    description: 'The message to output'
+  owner:
+    description: 'The owner of the GitHub repository you want to download files'
+  repo:
+    description: 'The name of the GitHub repository you want to download files'
+  ref:
+    description: 'The Git ref of the commit you want to download files'
+  prNumber:
+    description: 'The Pull Request number you want do download files'
+    required: true
+  storagePath:
+    description: 'Local path to store downloaded files'
+    required: true
+    default: 'tmp'
+  filterPath:
+    description: 'Filter files to be downloaded by path'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -1,13 +1,74 @@
 
 <p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
+  <a href="https://github.com/betrybe/download-files-from-pr-action/actions"><img alt="javscript-action status" src="https://github.com/betrybe/download-files-from-pr-action/workflows/units-test/badge.svg"></a>
 </p>
+
+# GitHub Action: Download files from PR
+
+A GitHub action that download modified files from specific _Pull Request_.
+
+## Example usage
+
+```yaml
+steps:
+  - name: Download files from PR
+    uses: betrybe/download-files-from-pr-action@master
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      prNumber: ${{ github.event.number }}
+```
+
+## Inputs
+
+This action accepts the following configuration parameters via `with:`
+
+- `token`
+
+  **Required**
+
+  The GitHub token to use for making API requests
+
+- `owner`
+
+  **Default: `github.repo.owner`**
+
+  The owner of the GitHub repository you want to download files
+
+- `repo`
+
+  **Default: `github.repo.repo`**
+
+  The name of the GitHub repository you want to download files
+
+- `ref`
+
+  **Required**
+  **Default: `github.sha`**
+
+  The Git ref of the commit you want to download files
+
+- `prNumber`
+
+  **Required**
+
+  The Pull Request number you want do download files
+
+- `storagePath`
+
+  **Required**
+  **Default: "tmp"**
+
+  Local path to store downloaded files
+
+- `filterPath`
+
+  Filter files to be downloaded by path
 
 # Create a JavaScript Action
 
 Use this template to bootstrap the creation of a JavaScript action.:rocket:
 
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.  
+This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
 
 If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
 
@@ -17,12 +78,12 @@ Click the `Use this Template` and provide the new repo details for your action
 
 ## Code in Master
 
-Install the dependencies  
+Install the dependencies
 ```bash
 $ npm install
 ```
 
-Run the tests :heavy_check_mark:  
+Run the tests :heavy_check_mark:
 ```bash
 $ npm test
 
@@ -51,9 +112,9 @@ const core = require('@actions/core');
 ...
 
 async function run() {
-  try { 
+  try {
       ...
-  } 
+  }
   catch (error) {
     core.setFailed(error.message);
   }
@@ -97,7 +158,7 @@ $ git commit -a -m "v1 release"
 $ git push origin v1
 ```
 
-Your action is now published! :rocket: 
+Your action is now published! :rocket:
 
 See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
 
@@ -106,9 +167,13 @@ See the [versioning documentation](https://github.com/actions/toolkit/blob/maste
 You can now consume the action by referencing the v1 branch
 
 ```yaml
-uses: actions/javascript-action@v1
+uses: betrybe/download-files-from-pr-action@v1
 with:
-  milliseconds: 1000
+  token: 'my-token'
+  owner: 'my-org'
+  repo: 'my-repo'
+  prNumber: '34'
+  storagePath: 'tmp/my'
 ```
 
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
+See the [actions tab](https://github.com/betrybe/download-files-from-pr-action/actions) for runs of this action! :rocket:
