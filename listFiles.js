@@ -8,8 +8,8 @@ const listFiles = async (options) => {
     log
   } = options;
 
-  console.log(options);
-  console.log(await client.pulls.listFiles());
+  const { data: files } = await client.pulls.listFiles();
+  return files.map(file => file.filename);
 };
 
 module.exports = listFiles;
