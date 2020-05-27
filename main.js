@@ -1,11 +1,12 @@
+const path = require('path');
+const fs = require('fs');
+
 const listFiles = async (options) => {
   const {
     client,
     owner,
     repo,
-    ref,
     prNumber,
-    storagePath,
     filterPath,
     log
   } = options;
@@ -22,6 +23,31 @@ const listFiles = async (options) => {
     .map(({ filename }) => filename);
 };
 
+const downloadFile = async (options) => {
+  const {
+    client,
+    owner,
+    repo,
+    ref,
+    storagePath,
+    filename,
+    log
+  } = options;
+
+  const { data: file } = await client.repos.getContents({
+    owner,
+    repo,
+    path: filename,
+    ref
+  });
+  const content = Buffer.from(file.content, file.encoding).toString();
+  const localPath = path.join(storagePath, file.path);
+  const { dir } = path.parse(localPath);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(localPath, content);
+};
+
 module.exports = {
   listFiles,
+  downloadFile,
 };
