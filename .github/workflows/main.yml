@@ -1,1 +1,17 @@
-on
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  evaluator:
+    runs-on: ubuntu-18.04
+    name: Evaluator job
+    steps:
+      - name: evaluator step
+        id: test
+        uses: betrybe/download-files-from-pr-action@baixa-arquivos-de-um-pr
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          prNumber: ${{ github.event.number }}
+        
