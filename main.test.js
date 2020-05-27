@@ -55,7 +55,7 @@ describe('Main', () => {
     jest.clearAllMocks();
   });
 
-  it('list all files from Pull Request', async () => {
+  it('list all modified files from Pull Request', async () => {
     client.pulls.listFiles.mockResolvedValue({
       data: [{
         filename: 'README.md',
@@ -71,7 +71,6 @@ describe('Main', () => {
     const expected = [
       'README.md',
       'content/meu-arquivo.md',
-      'wait.js',
     ];
     const filenames = await runListFiles();
     expect(client.pulls.listFiles).toHaveBeenCalled();
