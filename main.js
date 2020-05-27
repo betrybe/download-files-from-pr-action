@@ -5,11 +5,14 @@ const listFiles = async (options) => {
     repo,
     prNumber,
     storagePath,
+    filterPath,
     log
   } = options;
 
   const { data: files } = await client.pulls.listFiles();
-  return files.map(file => file.filename);
+  return files
+    .filter(({ filename }) => filename.includes(filterPath))
+    .map(({ filename }) => filename);
 };
 
 module.exports = {

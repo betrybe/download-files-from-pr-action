@@ -38,6 +38,26 @@ describe('Main', () => {
       'wait.js',
     ];
     const filenames = await run();
-    expect(filenames).toEqual(expect.arrayContaining(expected));
+    expect(filenames).toEqual(expected);
+  });
+
+  it('list filtered files from Pull Request', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }, {
+        filename: 'wait.js',
+        status: 'removed',
+      }]
+    });
+    const expected = [
+      'content/meu-arquivo.md',
+    ];
+    const filenames = await run('tmp', 'content/');
+    expect(filenames).toEqual(expected);
   });
 });
