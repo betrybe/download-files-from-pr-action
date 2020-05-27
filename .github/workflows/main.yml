@@ -15,4 +15,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.pull_request.head.sha }}
           prNumber: ${{ github.event.number }}
+          filterPath: 'content/'
+          storagePath: 'tmp/others'
       - run: ls -lahR tmp
