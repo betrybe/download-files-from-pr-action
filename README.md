@@ -43,6 +43,7 @@ This action accepts the following configuration parameters via `with:`
 - `ref`
 
   **Required**
+
   **Default: `github.sha`**
 
   The Git ref of the commit you want to download files
@@ -56,6 +57,7 @@ This action accepts the following configuration parameters via `with:`
 - `storagePath`
 
   **Required**
+
   **Default: "tmp"**
 
   Local path to store downloaded files
@@ -63,6 +65,17 @@ This action accepts the following configuration parameters via `with:`
 - `filterPath`
 
   Filter files to be downloaded by path
+
+## Outputs
+
+- `encodedRemovedFilenames`
+
+  Encoded Base64 string that contains the name of the removed files.
+
+  After decoding the array should be something like this:
+  ```json
+  ["filename1.json", "content/name.md", "/static/images/play.png"]
+  ```
 
 # Create a JavaScript Action
 
