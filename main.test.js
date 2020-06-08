@@ -46,6 +46,16 @@ const runDownloadFiles = (filterPath = '', storagePath = 'tmp/convert') => {
   });
 };
 
+const runListRemovedFiles = () => {
+  return main.listRemovedFiles({
+    client,
+    owner: 'my-org',
+    repo: 'my-repo',
+    prNumber: 1,
+    log: () => {},
+  });
+};
+
 describe('Main', () => {
   beforeEach(() => {
     fs.rmdirSync('tmp', { recursive: true });
@@ -263,5 +273,58 @@ describe('Main', () => {
     expect('blablabla\n').toBe(file1.toString());
     const file2 = fs.readFileSync('tmp/convert/other/content/meu-arquivo.md');
     expect('blablabla\n').toBe(file2.toString());
+  });
+
+  it('list all removed files from Pull Request', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'removed',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }, {
+        filename: 'wait.js',
+        status: 'removed',
+      }]
+    });
+    const expected = [
+      'README.md',
+      'wait.js',
+    ];
+    const filenames = await runListRemovedFiles();
+    expect(client.pulls.listFiles).toHaveBeenCalled();
+    expect(filenames).toEqual(expected);
+  });
+
+  it('empty list when no file was removed', async () => {
+    client.pulls.listFiles.mockResolvedValue({
+      data: [{
+        filename: 'README.md',
+        status: 'modified',
+      }, {
+        filename: 'content/meu-arquivo.md',
+        status: 'added',
+      }, {
+        filename: 'wait.js',
+        status: 'modified',
+      }]
+    });
+    const expected = [];
+    const filenames = await runListRemovedFiles();
+    expect(client.pulls.listFiles).toHaveBeenCalled();
+    expect(filenames).toEqual(expected);
+  });
+
+  it('not empty array to Base64', () => {
+    const filenames = ['filename1.json', 'content/name.md', '/static/images/play.png'];
+    const expected = 'ZmlsZW5hbWUxLmpzb24sY29udGVudC9uYW1lLm1kLC9zdGF0aWMvaW1hZ2VzL3BsYXkucG5n';
+    expect(main.arrayToBase64(filenames)).toBe(expected);
+  });
+
+  it('empty array to Base64', () => {
+    const filenames = [];
+    const expected = '';
+    expect(main.arrayToBase64(filenames)).toBe(expected);
   });
 });

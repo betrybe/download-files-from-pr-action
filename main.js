@@ -65,8 +65,35 @@ const downloadFiles = async (options) => {
   );
 };
 
+const listRemovedFiles = async (options) => {
+  const {
+    client,
+    owner,
+    repo,
+    prNumber,
+    log
+  } = options;
+
+  const { data: files } = await client.pulls.listFiles({
+    owner,
+    repo,
+    pull_number: prNumber,
+    per_page: 100,
+    page: 1,
+  });
+  return files
+    .filter(({ status }) => status === 'removed')
+    .map(({ filename }) => filename);
+};
+
+const arrayToBase64 = (array) => {
+  return Buffer.from(array.join(',')).toString('base64');
+};
+
 module.exports = {
   listFiles,
   downloadFile,
   downloadFiles,
+  listRemovedFiles,
+  arrayToBase64,
 };

@@ -22,6 +22,16 @@ async function run() {
       filterPath,
       log: (msg) => core.info(msg),
     });
+
+    const removedFilenames = await main.listRemovedFiles({
+      client: new github.GitHub(token),
+      owner,
+      repo,
+      prNumber: parseInt(prNumber),
+      log: (msg) => core.info(msg),
+    });
+
+    core.setOutput('encodedRemovedFilenames', main.arrayToBase64(removedFilenames));
   }
   catch (error) {
     core.setFailed(error.message);
