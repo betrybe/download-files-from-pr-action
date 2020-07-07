@@ -4262,11 +4262,10 @@ const downloadFile = async (options) => {
     path: filename,
     ref
   });
-  const content = Buffer.from(file.content, file.encoding).toString();
   const localPath = path.join(storagePath, file.path);
   const { dir } = path.parse(localPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, content);
+  fs.writeFileSync(localPath, Buffer.from(file.content, file.encoding));
 };
 
 const downloadFiles = async (options) => {
