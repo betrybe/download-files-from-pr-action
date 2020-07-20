@@ -4233,13 +4233,28 @@ const listFiles = async (options) => {
     log
   } = options;
 
-  const { data: files } = await client.pulls.listFiles({
-    owner,
-    repo,
-    pull_number: prNumber,
-    per_page: 100,
-    page: 1,
-  });
+  let firstOrHasNext = true;
+  let files = [];
+  let per_page = 100;
+  let page = 1;
+
+  while (firstOrHasNext) {
+    const { data } = await client.pulls.listFiles({
+      owner,
+      repo,
+      pull_number: prNumber,
+      per_page,
+      page,
+    });
+
+    if (data.length > 0) {
+      files.push(...data);
+      page += 1;
+    } else {
+      firstOrHasNext = false;
+    }
+  }
+
   return files
     .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
     .map(({ filename }) => filename);
@@ -4295,13 +4310,28 @@ const listRemovedFiles = async (options) => {
     log
   } = options;
 
-  const { data: files } = await client.pulls.listFiles({
-    owner,
-    repo,
-    pull_number: prNumber,
-    per_page: 100,
-    page: 1,
-  });
+  let firstOrHasNext = true;
+  let files = [];
+  let per_page = 100;
+  let page = 1;
+
+  while (firstOrHasNext) {
+    const { data } = await client.pulls.listFiles({
+      owner,
+      repo,
+      pull_number: prNumber,
+      per_page,
+      page,
+    });
+
+    if (data.length > 0) {
+      files.push(...data);
+      page += 1;
+    } else {
+      firstOrHasNext = false;
+    }
+  }
+
   return files
     .filter(({ status }) => status === 'removed')
     .map(({ filename }) => filename);
