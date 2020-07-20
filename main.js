@@ -1,14 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 
-const listFiles = async (options) => {
+const listFilesFromPR = async (options) => {
   const {
     client,
     owner,
     repo,
     prNumber,
-    filterPath,
-    log
   } = options;
 
   let firstOrHasNext = true;
@@ -32,6 +30,25 @@ const listFiles = async (options) => {
       firstOrHasNext = false;
     }
   }
+  return files;
+};
+
+const listFiles = async (options) => {
+  const {
+    client,
+    owner,
+    repo,
+    prNumber,
+    filterPath,
+    log
+  } = options;
+
+  const files = await listFilesFromPR({
+    client,
+    owner,
+    repo,
+    prNumber,
+  });
 
   return files
     .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
@@ -88,27 +105,12 @@ const listRemovedFiles = async (options) => {
     log
   } = options;
 
-  let firstOrHasNext = true;
-  let files = [];
-  let per_page = 100;
-  let page = 1;
-
-  while (firstOrHasNext) {
-    const { data } = await client.pulls.listFiles({
-      owner,
-      repo,
-      pull_number: prNumber,
-      per_page,
-      page,
-    });
-
-    if (data.length > 0) {
-      files.push(...data);
-      page += 1;
-    } else {
-      firstOrHasNext = false;
-    }
-  }
+  const files = await listFilesFromPR({
+    client,
+    owner,
+    repo,
+    prNumber,
+  });
 
   return files
     .filter(({ status }) => status === 'removed')
