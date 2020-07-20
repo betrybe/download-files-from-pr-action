@@ -117,6 +117,69 @@ describe('Main', () => {
     expect(filenames).toEqual(expected);
   });
 
+  it('list files from Pull Request when there is just one page', async () => {
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }, {
+          filename: 'wait.js',
+          status: 'removed',
+        }, {
+          filename: 'content/backend/intro.md',
+          status: 'modified',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
+    const expected = [
+      'README.md',
+      'content/meu-arquivo.md',
+      'content/backend/intro.md',
+    ];
+    const filenames = await runListFiles('');
+    expect(filenames).toEqual(expected);
+  });
+
+  it('list files from Pull Request when there are many pages', async () => {
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'wait.js',
+          status: 'removed',
+        }, {
+          filename: 'content/backend/intro.md',
+          status: 'modified',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
+    const expected = [
+      'README.md',
+      'content/meu-arquivo.md',
+      'content/backend/intro.md',
+    ];
+    const filenames = await runListFiles('');
+    expect(filenames).toEqual(expected);
+  });
+
   it('download file', async () => {
     client.repos.getContents.mockResolvedValue({
       data: {
