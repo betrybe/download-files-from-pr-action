@@ -66,18 +66,23 @@ describe('Main', () => {
   });
 
   it('list all modified files from Pull Request', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }, {
-        filename: 'wait.js',
-        status: 'removed',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }, {
+          filename: 'wait.js',
+          status: 'removed',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     const expected = [
       'README.md',
       'content/meu-arquivo.md',
@@ -88,18 +93,23 @@ describe('Main', () => {
   });
 
   it('list filtered files from Pull Request', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }, {
-        filename: 'wait.js',
-        status: 'removed',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }, {
+          filename: 'wait.js',
+          status: 'removed',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     const expected = [
       'content/meu-arquivo.md',
     ];
@@ -170,15 +180,20 @@ describe('Main', () => {
   });
 
   it('download files from pull request', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     client.repos.getContents
       .mockResolvedValueOnce({
         data: {
@@ -209,15 +224,20 @@ describe('Main', () => {
   });
 
   it('download filtered files from pull request', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     client.repos.getContents
       .mockResolvedValueOnce({
         data: {
@@ -237,15 +257,20 @@ describe('Main', () => {
   });
 
   it('download files from pull request in specific directory', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     client.repos.getContents
       .mockResolvedValueOnce({
         data: {
@@ -276,18 +301,23 @@ describe('Main', () => {
   });
 
   it('list all removed files from Pull Request', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'removed',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }, {
-        filename: 'wait.js',
-        status: 'removed',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValueOnce({
+        data: [{
+          filename: 'README.md',
+          status: 'removed',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }, {
+          filename: 'wait.js',
+          status: 'removed',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     const expected = [
       'README.md',
       'wait.js',
@@ -298,18 +328,23 @@ describe('Main', () => {
   });
 
   it('empty list when no file was removed', async () => {
-    client.pulls.listFiles.mockResolvedValue({
-      data: [{
-        filename: 'README.md',
-        status: 'modified',
-      }, {
-        filename: 'content/meu-arquivo.md',
-        status: 'added',
-      }, {
-        filename: 'wait.js',
-        status: 'modified',
-      }]
-    });
+    client.pulls.listFiles
+      .mockResolvedValue({
+        data: [{
+          filename: 'README.md',
+          status: 'modified',
+        }, {
+          filename: 'content/meu-arquivo.md',
+          status: 'added',
+        }, {
+          filename: 'wait.js',
+          status: 'modified',
+        }]
+      })
+      .mockResolvedValueOnce({
+        data: []
+      }
+    );
     const expected = [];
     const filenames = await runListRemovedFiles();
     expect(client.pulls.listFiles).toHaveBeenCalled();
