@@ -75,7 +75,7 @@ const downloadFile = async (options) => {
       format: "raw"
     }
   });
-  const localPath = path.join(storagePath, file.path);
+  const localPath = path.join(storagePath, filename);
   const { dir } = path.parse(localPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(localPath, file);
