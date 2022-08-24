@@ -70,12 +70,15 @@ const downloadFile = async (options) => {
     owner,
     repo,
     path: filename,
-    ref
+    ref,
+    mediaType: {
+      format: "raw"
+    }
   });
   const localPath = path.join(storagePath, file.path);
   const { dir } = path.parse(localPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, Buffer.from(file.content, file.encoding));
+  fs.writeFileSync(localPath, file);
 };
 
 const downloadFiles = async (options) => {
