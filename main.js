@@ -70,12 +70,28 @@ const downloadFile = async (options) => {
     owner,
     repo,
     path: filename,
-    ref
+    ref,
+    mediaType: {
+      format: "raw"
+    }
   });
-  const localPath = path.join(storagePath, file.path);
+  const localPath = path.join(storagePath, filename);
   const { dir } = path.parse(localPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, Buffer.from(file.content, file.encoding));
+
+  if (file.encoding != 'none') {
+    fs.writeFileSync(localPath, file.content, file.encoding);
+  } else {
+    const headers = {
+      "Authorization": `Bearer ${TOKEN}`
+    };
+
+    const download = await fetch(file.download_url, { headers });
+    const blob = await download.blob();
+    const arrayBuffer = await blob.arrayBuffer();
+
+    fs.writeFileSync(localPath, Buffer.from(arrayBuffer));
+  }
 };
 
 const downloadFiles = async (options) => {
