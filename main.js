@@ -78,7 +78,20 @@ const downloadFile = async (options) => {
   const localPath = path.join(storagePath, filename);
   const { dir } = path.parse(localPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, file);
+
+  if (file.encoding != 'none') {
+    fs.writeFileSync(localPath, file.content, file.encoding);
+  } else {
+    const headers = {
+      "Authorization": `Bearer ${TOKEN}`
+    };
+
+    const download = await fetch(file.download_url, { headers });
+    const blob = await download.blob();
+    const arrayBuffer = await blob.arrayBuffer();
+
+    fs.writeFileSync(localPath, Buffer.from(arrayBuffer));
+  }
 };
 
 const downloadFiles = async (options) => {
