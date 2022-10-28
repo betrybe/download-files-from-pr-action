@@ -13,10 +13,6 @@ inputs:
   prNumber:
     description: 'The Pull Request number you want do download files'
     required: true
-  storagePath:
-    description: 'Local path to store downloaded files'
-    required: true
-    default: 'tmp'
   filterPath:
     description: 'Filter files to be downloaded by path'
 outputs:

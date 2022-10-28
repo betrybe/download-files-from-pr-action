@@ -86,13 +86,12 @@ const downloadFiles = async (options) => {
     ref,
     prNumber,
     filterPath,
-    storagePath,
     log
   } = options;
 
   const filenames = await listFiles({ client, owner, repo, prNumber, filterPath, log });
   return Promise.all(
-    filenames.map(filename => downloadFile({ client, owner, repo, ref, storagePath, filename, log }))
+    filenames.map(filename => downloadFile({ client, owner, repo, ref, filename, log }))
   );
 };
 

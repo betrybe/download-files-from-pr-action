@@ -24,7 +24,6 @@ async function run() {
     const actor = github.context.actor;
     const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
-    const storagePath = core.getInput('storagePath', { required: true });
     const filterPath = core.getInput('filterPath') || '';
 
     const files = await main.downloadFiles({
@@ -33,7 +32,6 @@ async function run() {
       repo,
       ref,
       prNumber: parseInt(prNumber),
-      storagePath,
       filterPath,
       log: (msg) => core.info(msg),
     });
