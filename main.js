@@ -52,6 +52,7 @@ const listFiles = async (options) => {
 
   return files
     .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
+    .filter(({ filename }) => filename.endsWith('.md'))
     .map(({ filename }) => filename);
 };
 
@@ -61,9 +62,7 @@ const downloadFile = async (options) => {
     owner,
     repo,
     ref,
-    storagePath,
     filename,
-    log
   } = options;
 
   const { data: file } = await client.repos.getContents({
@@ -72,10 +71,11 @@ const downloadFile = async (options) => {
     path: filename,
     ref
   });
-  const localPath = path.join(storagePath, file.path);
-  const { dir } = path.parse(localPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, Buffer.from(file.content, file.encoding));
+
+  return {
+    content: Buffer.from(file.content, file.encoding).toString(),
+    filename: file.path
+  }
 };
 
 const downloadFiles = async (options) => {
