@@ -2302,7 +2302,6 @@ async function run() {
     const actor = github.context.actor;
     const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
-    const filterPath = core.getInput('filterPath') || '';
 
     const files = await main.downloadFiles({
       client: new github.GitHub(token),
@@ -2310,7 +2309,6 @@ async function run() {
       repo,
       ref,
       prNumber: parseInt(prNumber),
-      filterPath,
       log: (msg) => core.info(msg),
     });
 
@@ -27803,10 +27801,7 @@ function hasNextPage (link) {
 /***/ }),
 
 /***/ 937:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-const path = __webpack_require__(622);
-const fs = __webpack_require__(747);
+/***/ (function(module) {
 
 const listFilesFromPR = async (options) => {
   const {
@@ -27846,8 +27841,6 @@ const listFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    filterPath,
-    log
   } = options;
 
   const files = await listFilesFromPR({
@@ -27858,7 +27851,7 @@ const listFiles = async (options) => {
   });
 
   return files
-    .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
+    .filter(({ status }) => status !== 'removed')
     .filter(({ filename }) => filename.endsWith('.md'))
     .map(({ filename }) => filename);
 };
@@ -27892,11 +27885,10 @@ const downloadFiles = async (options) => {
     repo,
     ref,
     prNumber,
-    filterPath,
     log
   } = options;
 
-  const filenames = await listFiles({ client, owner, repo, prNumber, filterPath, log });
+  const filenames = await listFiles({ client, owner, repo, prNumber, log });
   return Promise.all(
     filenames.map(filename => downloadFile({ client, owner, repo, ref, filename, log }))
   );
@@ -27908,7 +27900,6 @@ const listRemovedFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    log
   } = options;
 
   const files = await listFilesFromPR({

@@ -1,6 +1,3 @@
-const path = require('path');
-const fs = require('fs');
-
 const listFilesFromPR = async (options) => {
   const {
     client,
@@ -39,8 +36,6 @@ const listFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    filterPath,
-    log
   } = options;
 
   const files = await listFilesFromPR({
@@ -51,7 +46,7 @@ const listFiles = async (options) => {
   });
 
   return files
-    .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
+    .filter(({ status }) => status !== 'removed')
     .filter(({ filename }) => filename.endsWith('.md'))
     .map(({ filename }) => filename);
 };
@@ -85,11 +80,10 @@ const downloadFiles = async (options) => {
     repo,
     ref,
     prNumber,
-    filterPath,
     log
   } = options;
 
-  const filenames = await listFiles({ client, owner, repo, prNumber, filterPath, log });
+  const filenames = await listFiles({ client, owner, repo, prNumber, log });
   return Promise.all(
     filenames.map(filename => downloadFile({ client, owner, repo, ref, filename, log }))
   );
@@ -101,7 +95,6 @@ const listRemovedFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    log
   } = options;
 
   const files = await listFilesFromPR({
