@@ -24,6 +24,9 @@ async function run() {
     const actor = github.context.actor;
     const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
+    console.log('prNumber', prNumber)
+    console.log('ref', ref)
+    console.log('context', github.context)
 
     const files = await main.downloadFiles({
       client: new github.GitHub(token),
