@@ -3,7 +3,7 @@ const github = require('@actions/github');
 const axios = require('axios').default
 const main = require('./main');
 
-const BATCH_UPDATE_URL = 'https://content-object-service-preview-app-142.betrybe.dev/content-object-service/external/v1/content_objects/batch_update'
+const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/batch_update'
 
 async function updateContentObjects(files, prNumber, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
