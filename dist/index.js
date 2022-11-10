@@ -2283,10 +2283,14 @@ const main = __webpack_require__(937);
 
 const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/batch_update'
 
-async function updateContentObjects(files, prNumber, repo, actor) {
+async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
 
-  return await axios.put(BATCH_UPDATE_URL, { files, pr_number: prNumber, repository: repo, github_username: actor })
+  const repository = `${owner}/${repo}`
+  const payload = { files, pr_number: prNumber, repository, github_username: actor }
+  console.log(payload)
+
+  return await axios.put(BATCH_UPDATE_URL, payload)
     .then(async (response) => {
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
@@ -2312,7 +2316,7 @@ async function run() {
       log: (msg) => core.info(msg),
     });
 
-    const response = await updateContentObjects(files, prNumber, repo, actor)
+    const response = await updateContentObjects(files, prNumber, owner, repo, actor)
 
     console.log(`Response: ${JSON.stringify(response.data)}`)
 
