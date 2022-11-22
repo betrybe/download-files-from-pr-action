@@ -10,9 +10,12 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
 
   const repository = `${owner}/${repo}`
   const payload = { files, pr_number: prNumber, repository, github_username: actor }
-  console.log(payload)
 
-  return await axios.put(BATCH_UPDATE_URL, payload)
+  const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
+  const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
+  const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+
+  return await axios.put(BATCH_UPDATE_URL, payload, { headers })
     .then(async (response) => {
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
