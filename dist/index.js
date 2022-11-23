@@ -2293,7 +2293,7 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
 
-  return await axios.put(BATCH_UPDATE_URL, payload, { headers })
+  return await axios.post(BATCH_UPDATE_URL, payload, { headers })
     .then(async (response) => {
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
