@@ -2281,7 +2281,7 @@ const github = __webpack_require__(469);
 const axios = __webpack_require__(983).default
 const main = __webpack_require__(937);
 
-const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/batch_update'
+const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_files'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
