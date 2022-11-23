@@ -2324,7 +2324,7 @@ async function run() {
     console.log(`Response: ${JSON.stringify(response.data)}`)
 
     if (response.status != 200) {
-      core.setFailed(`[ERROR] Failed to update Content Objects: ${JSON.stringify(response.data)}`)
+      core.setFailed(`[ERROR] Failed to update Content Objects: ${JSON.stringify(response)}`)
     }
   }
   catch (error) {
