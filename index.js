@@ -46,7 +46,7 @@ async function run() {
     const response = await updateContentObjects(files, prNumber, owner, repo, actor)
 
     if (response.status != 200) {
-      core.setOutput('errors', response.data);
+      core.setOutput('errors', response.data.errors);
       core.setFailed(`[ERROR] Failed to update Content Objects: ${JSON.stringify(response)}`)
     }
   }
