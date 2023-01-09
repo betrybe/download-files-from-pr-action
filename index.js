@@ -13,16 +13,30 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
 
   const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
-  const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+  // const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+
+  // const options = {
+  //   'Authorization': `Basic ${encodedUsernamePassword}`,
+
+  // }
 
   console.log('payload', payload)
 
-  return await axios.post(BATCH_UPDATE_URL, payload, { headers })
-    .then(async (response) => {
+  return await fetch(BATCH_UPDATE_URL, {
+      method: 'POST',
+      headers: new Headers({'Authorization': `Basic ${encodedUsernamePassword}`}),
+      body: JSON.stringify(payload)
+    }).then(async (response) => {
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
-    })
-    .catch(async (error) => ({ status: error.response.status, data: error.response.data }))
+    }).catch(async (error) => ({ status: error.response.status, data: error.response.data }))
+
+  // return await axios.post(BATCH_UPDATE_URL, payload, { headers })
+  //   .then(async (response) => {
+  //     core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
+  //     return { status: response.status, data: response.data }
+  //   })
+  //   .catch(async (error) => ({ status: error.response.status, data: error.response.data }))
 }
 
 async function run() {
