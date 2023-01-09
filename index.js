@@ -6,7 +6,7 @@ const main = require('./main');
 const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_objects'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
-  core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
+  core.info(`\u001B[34m[INFO] Validating Content Objects modifield on Pull Request ${prNumber}`)
 
   const repository = `${owner}/${repo}`
   const payload = { files, pr_number: prNumber, repository, github_username: actor }
