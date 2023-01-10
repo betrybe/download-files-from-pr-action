@@ -4,6 +4,7 @@ const axios = require('axios').default
 const main = require('./main');
 
 const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_objects'
+const VALIDATE_CONTENT_OBJECTS_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_objects'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
@@ -23,6 +24,23 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
       return { status: response.status, data: response.data }
     })
     .catch(async (error) => ({ status: error.response.status, data: error.response.data }))
+}
+
+async function validateContentObjects(files, prNumber, owner, repo, actor) {
+  core.info(`\u001B[34m[INFO] Validating Content Objects modifield on Pull Request ${prNumber}`)
+
+  const repository = `${owner}/${repo}`
+  const payload = { files, repository, github_username: actor }
+  const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
+  const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
+  const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+
+  return await axios.post(VALIDATE_CONTENT_OBJECTS_URL, payload, { headers })
+  .then(async (response) => {
+    core.info('\u001B[34m[INFO] Content Objects validated successfully ✓')
+    return { status: response.status, data: response.data }
+  })
+  .catch(async (error) => ({ status: error.response.status, data: error.response.data }))
 }
 
 async function run() {
@@ -46,11 +64,20 @@ async function run() {
       log: (msg) => core.info(msg),
     });
 
-    const response = await updateContentObjects(files, prNumber, owner, repo, actor)
+    if (validate) {
+      const response = await validateContentObjects(files, prNumber, owner, repo, actor)
 
-    if (response.status != 200) {
-      core.setOutput('errors', response.data.errors);
-      core.setFailed(`[ERROR] Failed to update Content Objects: ${JSON.stringify(response)}`)
+      if (response.status != 200) {
+        core.setOutput('errors', response.data.errors);
+        core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
+      }
+    } else {
+      const response = await updateContentObjects(files, prNumber, owner, repo, actor)
+
+      if (response.status != 200) {
+        core.setOutput('errors', response.data.errors);
+        core.setFailed(`[ERROR] Failed to update Content Objects: ${JSON.stringify(response)}`)
+      }
     }
   }
   catch (error) {
