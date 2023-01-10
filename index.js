@@ -3,22 +3,19 @@ const github = require('@actions/github');
 const axios = require('axios').default
 const main = require('./main');
 
-const BATCH_UPDATE_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_objects'
-const VALIDATE_CONTENT_OBJECTS_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects/validate_objects'
+const CONTENT_OBJECT_API_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
 
   const repository = `${owner}/${repo}`
   const payload = { files, pr_number: prNumber, repository, github_username: actor }
-
   const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+  const batch_update_url = `${CONTENT_OBJECT_API_URL}/batch_update`
 
-  console.log('payload', payload)
-
-  return await axios.post(BATCH_UPDATE_URL, payload, { headers })
+  return await axios.post(batch_update_url, payload, { headers })
     .then(async (response) => {
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
@@ -34,8 +31,9 @@ async function validateContentObjects(files, prNumber, owner, repo, actor) {
   const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
+  const validate_objects_url = `${CONTENT_OBJECT_API_URL}/validate_objects`
 
-  return await axios.post(VALIDATE_CONTENT_OBJECTS_URL, payload, { headers })
+  return await axios.post(validate_objects_url, payload, { headers })
   .then(async (response) => {
     core.info('\u001B[34m[INFO] Content Objects validated successfully ✓')
     return { status: response.status, data: response.data }
