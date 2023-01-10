@@ -2649,9 +2649,9 @@ async function run() {
     const actor = github.context.actor;
     const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
-    const action = core.getInput('action');
+    const validate = core.getInput('validate');
 
-    console.log('[ACTION]', action);
+    console.log('[validate]', validate);
 
     const files = await main.downloadFiles({
       client: new github.GitHub(token),
