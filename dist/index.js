@@ -2678,7 +2678,7 @@ async function run() {
       log: (msg) => core.info(msg),
     });
 
-    if (validate) {
+    if (validate == 'true') {
       const response = await validateContentObjects(files, prNumber, owner, repo, actor)
 
       if (response.status != 200) {
