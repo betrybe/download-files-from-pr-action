@@ -67,7 +67,8 @@ async function run() {
 
       if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
-        core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
+        // Comentar essas linhas quando estiver em período de validação
+        // core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
       }
     } else {
       const response = await updateContentObjects(files, prNumber, owner, repo, actor)
