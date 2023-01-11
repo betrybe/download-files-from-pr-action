@@ -2631,8 +2631,12 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
   const batch_update_url = `${CONTENT_OBJECT_API_URL}/batch_update`
 
+  console.log('[batch_update_url]', batch_update_url);
+  console.log('[payload]', payload)
+
   return await axios.post(batch_update_url, payload, { headers })
     .then(async (response) => {
+      console.log('[response]', response)
       core.info('\u001B[34m[INFO] Content Objects updated successfully ✓')
       return { status: response.status, data: response.data }
     })
