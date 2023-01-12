@@ -68,6 +68,7 @@ async function run() {
 
     if (validate == 'true') {
       const response = await validateContentObjects(files, prNumber, owner, repo, actor)
+      console.log('response', response)
 
       if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
