@@ -2685,9 +2685,9 @@ async function run() {
     if (validate == 'true') {
       const response = await validateContentObjects(files, prNumber, owner, repo, actor)
       console.log('response', JSON.stringify(response.data.errors))
-      console.log('typeof reponse', (typeof response.data.errors))
+      console.log('typeof response', (typeof response.data.errors))
 
-      if (response.status == 422) {
+      if (response.status == 422 && (typeof response.data.errors == 'undefined')) {
         core.setOutput('validation_failed', true);
       } else if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
