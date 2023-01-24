@@ -68,7 +68,7 @@ async function run() {
 
     if (validate == 'true') {
       const response = await validateContentObjects(files, prNumber, owner, repo, actor)
-      console.log('response', response)
+      console.log('response', JSON.stringify(response.data.errors))
 
       if (response.status == 422) {
         core.setOutput('validation_failed', true);
