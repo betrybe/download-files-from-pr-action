@@ -47,7 +47,7 @@ const listFiles = async (options) => {
 
   return files
     .filter(({ status }) => status !== 'removed')
-    .filter(({ filename }) => filename.endsWith('.md'))
+    .filter(({ filename }) => filename.endsWith('index.md'))
     .map(({ filename }) => filename);
 };
 
