@@ -72,6 +72,7 @@ async function run() {
       console.log('typeof response', (typeof response.data.errors))
 
       if (response.status == 422 && (typeof response.data.errors == 'undefined')) {
+        core.setOutput('errors', []);
         core.setOutput('validation_failed', true);
       } else if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
