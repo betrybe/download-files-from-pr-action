@@ -84,6 +84,7 @@ const downloadFiles = async (options) => {
   } = options;
 
   const filenames = await listFiles({ client, owner, repo, prNumber, log });
+  console.log('[ filenames ]', filenames)
   return Promise.all(
     filenames.map(filename => downloadFile({ client, owner, repo, ref, filename, log }))
   );
