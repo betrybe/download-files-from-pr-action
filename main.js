@@ -1,6 +1,3 @@
-const path = require('path');
-const fs = require('fs');
-
 const listFilesFromPR = async (options) => {
   const {
     client,
@@ -39,8 +36,6 @@ const listFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    filterPath,
-    log
   } = options;
 
   const files = await listFilesFromPR({
@@ -51,7 +46,8 @@ const listFiles = async (options) => {
   });
 
   return files
-    .filter(({ filename, status }) => filename.includes(filterPath) && status !== 'removed')
+    .filter(({ status }) => status !== 'removed')
+    .filter(({ filename }) => filename.endsWith('index.md'))
     .map(({ filename }) => filename);
 };
 
@@ -61,9 +57,7 @@ const downloadFile = async (options) => {
     owner,
     repo,
     ref,
-    storagePath,
     filename,
-    log
   } = options;
 
   const { data: file } = await client.repos.getContents({
@@ -72,10 +66,11 @@ const downloadFile = async (options) => {
     path: filename,
     ref
   });
-  const localPath = path.join(storagePath, file.path);
-  const { dir } = path.parse(localPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(localPath, Buffer.from(file.content, file.encoding));
+
+  return {
+    content: Buffer.from(file.content, file.encoding).toString(),
+    filename: file.path
+  }
 };
 
 const downloadFiles = async (options) => {
@@ -85,14 +80,13 @@ const downloadFiles = async (options) => {
     repo,
     ref,
     prNumber,
-    filterPath,
-    storagePath,
     log
   } = options;
 
-  const filenames = await listFiles({ client, owner, repo, prNumber, filterPath, log });
+  const filenames = await listFiles({ client, owner, repo, prNumber, log });
+  console.log('[ filenames ]', filenames)
   return Promise.all(
-    filenames.map(filename => downloadFile({ client, owner, repo, ref, storagePath, filename, log }))
+    filenames.map(filename => downloadFile({ client, owner, repo, ref, filename, log }))
   );
 };
 
@@ -102,7 +96,6 @@ const listRemovedFiles = async (options) => {
     owner,
     repo,
     prNumber,
-    log
   } = options;
 
   const files = await listFilesFromPR({
