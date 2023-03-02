@@ -13,12 +13,12 @@ inputs:
   prNumber:
     description: 'The Pull Request number you want do download files'
     required: true
-  storagePath:
-    description: 'Local path to store downloaded files'
-    required: true
-    default: 'tmp'
   filterPath:
     description: 'Filter files to be downloaded by path'
+  validate:
+    description: 'Check to validate Content Objects consistency'
+    required: true
+    default: false
 outputs:
   encodedRemovedFilenames:
     description: 'Encoded Base64 string that contains the name of the removed files'
