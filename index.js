@@ -74,6 +74,9 @@ async function run() {
       if (response.status == 422 && (typeof response.data.errors == 'undefined')) {
         core.setOutput('errors', []);
         core.setOutput('validation_failed', true);
+
+        // A linha abaixo é responsável por travar o Pull Request
+        core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
       } else if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
         core.setOutput('validation_failed', false);
