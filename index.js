@@ -3,7 +3,7 @@ const github = require('@actions/github');
 const axios = require('axios').default
 const main = require('./main');
 
-const CONTENT_OBJECT_API_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects'
+const CONTENT_OBJECT_API_URL = 'https://api.betrybe.com/content-object-service/external/v1/content_objects'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
