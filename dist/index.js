@@ -2619,7 +2619,7 @@ const github = __webpack_require__(469);
 const axios = __webpack_require__(545).default
 const main = __webpack_require__(937);
 
-const CONTENT_OBJECT_API_URL = 'https://api.betrybe.dev/content-object-service/external/v1/content_objects'
+const CONTENT_OBJECT_API_URL = 'https://api.betrybe.com/content-object-service/external/v1/content_objects'
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
@@ -2690,11 +2690,15 @@ async function run() {
       if (response.status == 422 && (typeof response.data.errors == 'undefined')) {
         core.setOutput('errors', []);
         core.setOutput('validation_failed', true);
+
+        // A linha abaixo é responsável por travar o Pull Request
+        core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
       } else if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
         core.setOutput('validation_failed', false);
-        // Comentar essas linhas quando estiver em período de validação
-        // core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
+
+        // A linha abaixo é responsável por travar o Pull Request
+        core.setFailed(`[ERROR] Failed to validate Content Objects: ${JSON.stringify(response)}`)
       } else {
         core.setOutput('errors', []);
         core.setOutput('validation_failed', false);
