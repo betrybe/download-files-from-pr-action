@@ -2629,14 +2629,10 @@ const apiDomains = {
   'production': 'https://api.betrybe.com'
 }
 
-console.log('apiDomains[environment]', apiDomains[environment]);
-
 const CONTENT_OBJECT_API_URL = apiDomains[environment] + '/content-object-service/external/v1/content_objects';
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
-
-  console.log('updateContentObjects:apiDomains[environment]', apiDomains[environment]);
 
   const repository = `${owner}/${repo}`
   const payload = { files, pr_number: prNumber, repository, github_username: actor }
