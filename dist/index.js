@@ -2670,6 +2670,9 @@ async function run() {
     const ref = core.getInput('ref') || github.context.sha;
     const prNumber = core.getInput('prNumber', { required: true });
     const validate = core.getInput('validate');
+    const environment = core.getInput('environment');
+
+    console.log('[environment]', environment);
 
     console.log('[validate]', validate);
 
