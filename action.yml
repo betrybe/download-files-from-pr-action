@@ -19,6 +19,10 @@ inputs:
     description: 'Check to validate Content Objects consistency'
     required: true
     default: false
+  environment:
+    description: 'Validates educational object on selected environment'
+    required: true
+    default: 'development'
 outputs:
   encodedRemovedFilenames:
     description: 'Encoded Base64 string that contains the name of the removed files'
