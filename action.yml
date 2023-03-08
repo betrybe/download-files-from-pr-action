@@ -19,9 +19,13 @@ inputs:
     description: 'Check to validate Content Objects consistency'
     required: true
     default: false
+
 outputs:
   encodedRemovedFilenames:
     description: 'Encoded Base64 string that contains the name of the removed files'
+
 runs:
-  using: 'node12'
+  using: 'node18'
   main: 'dist/index.js'
+  env:
+    ENVIRONMENT: ${{ inputs.environment }}
