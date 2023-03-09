@@ -2619,7 +2619,17 @@ const github = __webpack_require__(469);
 const axios = __webpack_require__(545).default
 const main = __webpack_require__(937);
 
-const CONTENT_OBJECT_API_URL = 'https://api.betrybe.com/content-object-service/external/v1/content_objects'
+const environment = core.getInput('environment');
+
+console.log('[environment]', environment);
+
+const apiDomains = {
+  'test': 'http://localhost:4000',
+  'staging': 'https://api.betrybe.dev',
+  'production': 'https://api.betrybe.com'
+}
+
+const CONTENT_OBJECT_API_URL = apiDomains[environment] + '/content-object-service/external/v1/content_objects';
 
 async function updateContentObjects(files, prNumber, owner, repo, actor) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
