@@ -2682,7 +2682,8 @@ async function run() {
     const validate = core.getInput('validate');
 
 
-    console.log('[ref]', ref);
+    console.log('[ref]', github.context.ref);
+    console.log('[action_ref]', github.context.action_ref);
     console.log('[validate]', validate);
 
     const files = await main.downloadFiles({
