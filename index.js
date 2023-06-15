@@ -65,6 +65,8 @@ async function run() {
     const prNumber = core.getInput('prNumber', { required: true });
     const validate = core.getInput('validate');
 
+
+    console.log('[ref]', ref);
     console.log('[validate]', validate);
 
     const files = await main.downloadFiles({
