@@ -15,11 +15,11 @@ const apiDomains = {
 
 const CONTENT_OBJECT_API_URL = apiDomains[environment] + '/content-object-service/external/v1/content_objects';
 
-async function updateContentObjects(files, prNumber, owner, repo, actor) {
+async function updateContentObjects(files, prNumber, owner, repo, actor, ref) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
 
   const repository = `${owner}/${repo}`
-  const payload = { files, pr_number: prNumber, repository, github_username: actor }
+  const payload = { files, pr_number: prNumber, repository, github_username: actor, ref }
   const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
@@ -37,11 +37,11 @@ async function updateContentObjects(files, prNumber, owner, repo, actor) {
     .catch(async (error) => ({ status: error.response.status, data: error.response.data }))
 }
 
-async function validateContentObjects(files, prNumber, owner, repo, actor) {
+async function validateContentObjects(files, prNumber, owner, repo, actor, ref) {
   core.info(`\u001B[34m[INFO] Validating Content Objects modifield on Pull Request ${prNumber}`)
 
   const repository = `${owner}/${repo}`
-  const payload = { files, repository, github_username: actor }
+  const payload = { files, repository, github_username: actor, ref }
   const basicAuthPassword = process.env.BASIC_AUTH_PASSWORD
   const encodedUsernamePassword = Buffer.from(`squad_cursos:${basicAuthPassword}`).toString('base64')
   const headers = {'Authorization': `Basic ${encodedUsernamePassword}`}
@@ -77,7 +77,7 @@ async function run() {
     });
 
     if (validate == 'true') {
-      const response = await validateContentObjects(files, prNumber, owner, repo, actor)
+      const response = await validateContentObjects(files, prNumber, owner, repo, actor, ref)
       console.log('response', JSON.stringify(response.data.errors))
       console.log('typeof response', (typeof response.data.errors))
 
@@ -98,7 +98,7 @@ async function run() {
         core.setOutput('validation_failed', false);
       }
     } else {
-      const response = await updateContentObjects(files, prNumber, owner, repo, actor)
+      const response = await updateContentObjects(files, prNumber, owner, repo, actor, ref)
 
       if (response.status != 200) {
         core.setOutput('errors', response.data.errors);
