@@ -10,10 +10,11 @@ console.log('[environment]', environment);
 const apiDomains = {
   'test': 'http://localhost:4000',
   'staging': 'https://api.betrybe.dev',
+  'homologation': 'https://api.betrybe.app',
   'production': 'https://api.betrybe.com'
 }
 
-const CONTENT_OBJECT_API_URL = apiDomains[environment] + '/content-object-service/external/v1/content_objects';
+const CONTENT_OBJECT_API_URL = apiDomains[environment] + '/lego-lms/external/v1/content_objects';
 
 async function updateContentObjects(files, prNumber, owner, repo, actor, ref) {
   core.info(`\u001B[34m[INFO] Updating Content Objects modifield on Pull Request ${prNumber}`)
