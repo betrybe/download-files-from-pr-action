@@ -12,7 +12,7 @@ A GitHub action that download modified files from specific _Pull Request_.
 ```yaml
 steps:
   - name: Download files from PR
-    uses: betrybe/download-files-from-pr-action@master
+    uses: betrybe/download-files-from-pr-action@v3.0.0
     with:
       token: ${{ secrets.GITHUB_TOKEN }}
       prNumber: ${{ github.event.number }}
@@ -180,7 +180,7 @@ See the [versioning documentation](https://github.com/actions/toolkit/blob/maste
 You can now consume the action by referencing the v1 branch
 
 ```yaml
-uses: betrybe/download-files-from-pr-action@v1
+uses: betrybe/download-files-from-pr-action@v3.0.0
 with:
   token: 'my-token'
   owner: 'my-org'
